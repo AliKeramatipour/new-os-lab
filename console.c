@@ -202,6 +202,23 @@ cgaputc(int c)
   //crt[pos] = ' ' | 0x0700;
 }
 
+void changeCursor(int dest)
+{
+  int pos;
+  outb(CRTPORT, 14);
+  pos = inb(CRTPORT+1) << 8;
+  outb(CRTPORT, 15);
+  pos |= inb(CRTPORT+1);
+  
+  
+  pos += dest ;
+  
+  outb(CRTPORT, 14);
+  outb(CRTPORT+1, pos>>8);
+  outb(CRTPORT, 15);
+  outb(CRTPORT+1, pos);
+}
+
 void
 consputc(int c)
 {
@@ -248,6 +265,17 @@ consoleintr(int (*getc)(void))
         consputc(BACKSPACE);
       }
       break;
+    case C('C') :
+      changeCursor(input.length - input.e) ;
+      
+      while ( input.length != input.w )
+      {
+        input.buf[input.length % INPUT_BUF] = '\0' ;
+        input.length-- ;
+        consputc(BACKSPACE) ;
+      }
+      input.e = input.length;
+      break;
     case '{':
       input.e = input.r ;
       consputc('{') ;
@@ -257,7 +285,7 @@ consoleintr(int (*getc)(void))
       consputc('}') ;
       break; 
     // Debug for input buffer ctrl + B
-     case C('C') :
+     case C('B') :
       cprintf("\n--%s--\n" , input.buf) ;
       cprintf("r:%d\n" , input.r) ;
       cprintf("e:%d\n" , input.e) ;
