@@ -6,10 +6,36 @@
 #include "defs.h"
 #include "x86.h"
 #include "elf.h"
+#include "path.h"
+
+char *
+strcat(char *dest, char *src)
+{
+    int i,j;
+    for (i = 0; dest[i] != '\0'; i++);
+    for (j = 0; src[j] != '\0'; j++)
+        dest[i+j] = src[j];
+    dest[i+j] = '\0';
+    return dest;
+}
+
+char*
+strcpy(char *s, const char *t)
+{
+  char *os;
+
+  os = s;
+  while((*s++ = *t++) != 0)
+    ;
+  return os;
+}
+
 
 int
 exec(char *path, char **argv)
 {
+  char progPath[1024];
+  int j, flag = 0;
   char *s, *last;
   int i, off;
   uint argc, sz, sp, ustack[3+MAXARG+1];
@@ -19,12 +45,31 @@ exec(char *path, char **argv)
   pde_t *pgdir, *oldpgdir;
   struct proc *curproc = myproc();
 
+  strcpy(progPath, path);
+
   begin_op();
 
-  if((ip = namei(path)) == 0){
-    end_op();
-    cprintf("exec: fail\n");
-    return -1;
+  if((ip = namei(progPath)) == 0){
+    for (j = 0 ; j < 10 ; j++) {
+      strcpy(progPath, "\0");
+      strcat(progPath, PATH[j]);
+      if (progPath[strlen(progPath) - 1] != '/') {
+        strcat(progPath, "/");
+      }
+      strcat(progPath, path);
+      if((ip = namei(progPath)) == 0) {
+        continue;
+      }
+      else {
+        flag = 1;
+        break;
+      }
+    }
+    if (flag == 0) {
+      end_op();
+      cprintf("exec: fail\n");
+      return -1;
+    }
   }
   ilock(ip);
   pgdir = 0;
@@ -88,7 +133,7 @@ exec(char *path, char **argv)
     goto bad;
 
   // Save program name for debugging.
-  for(last=s=path; *s; s++)
+  for(last=s=progPath; *s; s++)
     if(*s == '/')
       last = s+1;
   safestrcpy(curproc->name, last, sizeof(curproc->name));

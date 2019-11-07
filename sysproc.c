@@ -6,6 +6,8 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "path.h"
+// #include "uli  b.c"
 
 int
 sys_fork(void)
@@ -88,4 +90,29 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int
+sys_addpath(void)
+{
+  char * newPath;
+  volatile int i = 0, j = 0, k = 0;
+  volatile char curChar = '1';
+  if(argstr(0, &newPath) < 0)
+    return -1;
+  curChar = newPath[0];
+  while(1) {
+    curChar = newPath[k++];
+    if (i > 9 || curChar == '\0') {
+      return 0;
+    }
+    if (curChar == ':') {
+      i++;
+      j = 0;
+      continue;
+    }
+    PATH[i][j] = curChar;
+    j++; 
+  }
+  return 0;
 }
