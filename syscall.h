@@ -21,3 +21,7 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_addpath 22
+#define SYS_delay 23
+#define SYS_getparentid 24
+#define SYS_getchildrenid 25
+#define SYS_gettime 26

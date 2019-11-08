@@ -116,3 +116,45 @@ sys_addpath(void)
   }
   return 0;
 }
+
+int
+sys_delay(void)
+{
+  int n;
+  uint ticks0;
+
+  if(argint(0, &n) < 0)
+    return -1;
+  acquire(&tickslock);
+  ticks0 = ticks;
+  while(ticks - ticks0 < 100 * n){
+    if(myproc()->killed){
+      return -1;
+    }
+    sleep(&ticks, &tickslock);
+  }
+  release(&tickslock);
+  return 0;
+
+}
+
+int 
+sys_getparentid(void) 
+{
+  return 0;
+}
+
+int 
+sys_getchildrenid(void) 
+{
+  return 0;
+}
+
+struct rtcdate*
+sys_gettime (void) 
+{
+  struct rtcdate* date;
+  argptr(0, (void*)&date, sizeof(*date));
+  cmostime(date);
+  return date;
+}

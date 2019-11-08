@@ -156,6 +156,10 @@ int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
 void            syscall(void);
 int             addpath(char *);
+int             delay(int);
+int             getparentid(int);
+int             getchildrenid(int);
+int             gettime(struct rtcdate*);                                                                                                                           
 
 // timer.c
 void            timerinit(void);
