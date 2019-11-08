@@ -532,3 +532,55 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int getparent (int pid) {
+  struct proc *p;
+  int a = 0;
+  int parentPid = 0;
+  a++;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      parentPid = p->parent->pid;
+      release(&ptable.lock);
+      return parentPid;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int pow(int a, int b){
+  int i, res = 1;
+  for(i = 0 ; i < b ; i++){
+    res *= a;
+  }
+  return res;
+}
+
+int getchildren(int pid, char *children) {
+  struct proc *p;
+  int a = 0, max = 0, pos = 0, cpid;
+
+  cprintf("in getpa %d\n", pid);
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->parent->pid == pid){
+      cpid = p->pid;
+      for(a = 0 ; cpid / pow(10, a) > 0 ; a++);
+      max = a;
+      for(; a > 0 ; a--){
+        children[pos + a - 1] = cpid % 10 + 0x30;
+        cpid /= 10;
+      }
+      pos += max;
+    }
+    if(pos >= 128){
+      return -1;
+    }
+  }
+  children[pos]= '\0';
+  release(&ptable.lock);
+  return 0;
+}
+

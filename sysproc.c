@@ -141,13 +141,23 @@ sys_delay(void)
 int 
 sys_getparentid(void) 
 {
-  return 0;
+
+
+  // struct proc *p;
+  int pid;
+  argint(0,&pid);
+  cprintf("in syscall %d\n", pid);
+  return getparent(pid);
 }
 
 int 
 sys_getchildrenid(void) 
 {
-  return 0;
+  char *children;
+  int pid;
+  argint(0, &pid);
+  argptr(1, (void*)&children, sizeof(*children));
+  return getchildren(pid, children);
 }
 
 struct rtcdate*

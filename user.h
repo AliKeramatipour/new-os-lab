@@ -26,7 +26,7 @@ int uptime(void);
 int addpath(char *);
 int delay(int);
 int getparentid(int);
-int getchildrenid(int);    
+int getchildrenid(int, char*);    
 struct rtcdate* gettime(struct rtcdate*);                                                                                                                           
 
 // ulib.c
