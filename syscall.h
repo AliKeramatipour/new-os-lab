@@ -25,3 +25,4 @@
 #define SYS_getparentid 24
 #define SYS_getchildrenid 25
 #define SYS_gettime 26
+#define SYS_recchildren 27

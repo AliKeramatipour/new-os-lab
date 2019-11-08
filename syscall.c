@@ -108,6 +108,7 @@ extern int sys_delay(void);
 extern int sys_getparentid(void);
 extern int sys_getchildrenid(void);
 extern int sys_gettime(void);
+extern int sys_recchildren(void);
 
 
 static int (*syscalls[])(void) = {
@@ -137,7 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_getparentid] sys_getparentid,
 [SYS_getchildrenid] sys_getchildrenid,
 [SYS_gettime] sys_gettime,
-
+[SYS_recchildren] sys_recchildren,
 };
 
 void

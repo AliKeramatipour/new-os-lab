@@ -122,6 +122,7 @@ void            wakeup(void*);
 void            yield(void);
 int             getparent(int);
 int             getchildren(int, char*);
+int             getrecchildren(int pid, char *children, int pos);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
@@ -160,8 +161,9 @@ void            syscall(void);
 int             addpath(char *);
 int             delay(int);
 int             getparentid(int);
-int             getchildrenid(int);
-int             gettime(struct rtcdate*);                                                                                                                           
+int             getchildrenid(int, char*);
+int             gettime(struct rtcdate*);         
+int             recchildren(int, char*);                                                                                                                  
 
 // timer.c
 void            timerinit(void);

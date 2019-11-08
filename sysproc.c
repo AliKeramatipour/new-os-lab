@@ -168,3 +168,15 @@ sys_gettime (void)
   cmostime(date);
   return date;
 }
+
+int
+sys_recchildren (void) 
+{
+  char *children;
+  int pid, last;
+  argint(0, &pid);
+  argptr(1, (void*)&children, sizeof(*children));
+  last = getrecchildren(pid, children, 0);
+  children[last] = '\0';
+  return last;
+}

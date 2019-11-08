@@ -8,8 +8,10 @@ int main () {
     int pid;
     char children [128];
     pid = getpid();
-    if (fork() != 0 && fork() != 0 && fork() != 0) {
-        getchildrenid(pid, children);
+    fork();
+    wait();
+    if(fork() != 0){
+        recchildren(pid, children);
         printf(1, "CHILDREN %s\n", children);
         wait();
     }

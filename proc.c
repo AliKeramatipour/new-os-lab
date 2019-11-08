@@ -562,7 +562,6 @@ int getchildren(int pid, char *children) {
   struct proc *p;
   int a = 0, max = 0, pos = 0, cpid;
 
-  cprintf("in getpa %d\n", pid);
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->parent->pid == pid){
@@ -584,3 +583,31 @@ int getchildren(int pid, char *children) {
   return 0;
 }
 
+int getrecchildren(int pid, char *children, int pos) {
+  struct proc *p;
+  int a = 0, max = 0, cpid;
+  children[pos] = '\0';
+  children[pos++] = '>';
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if (p->parent->pid == pid) {
+      cpid = p->pid;
+      for(a = 0 ; cpid / pow(10, a) > 0 ; a++);
+      max = a;
+      for(; a > 0 ; a--){
+        children[pos + a - 1] = cpid % 10 + 0x30;
+        cpid /= 10;
+      }
+      pos += max;
+      release(&ptable.lock);
+      pos = getrecchildren(p->pid, children, pos);
+      acquire(&ptable.lock);
+    }
+    if (pos >= 128) {
+      return -1;
+    }
+  }
+  release(&ptable.lock);
+  children[pos++] = '<';
+  return pos;
+}

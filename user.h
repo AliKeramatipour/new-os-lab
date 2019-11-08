@@ -27,7 +27,8 @@ int addpath(char *);
 int delay(int);
 int getparentid(int);
 int getchildrenid(int, char*);    
-struct rtcdate* gettime(struct rtcdate*);                                                                                                                           
+struct rtcdate* gettime(struct rtcdate*);
+int recchildren (int , char*);                                                                                                                    
 
 // ulib.c
 int stat(const char*, struct stat*);
