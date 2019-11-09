@@ -141,12 +141,8 @@ sys_delay(void)
 int 
 sys_getparentid(void) 
 {
-
-
-  // struct proc *p;
   int pid;
   argint(0,&pid);
-  cprintf("in syscall %d\n", pid);
   return getparent(pid);
 }
 
