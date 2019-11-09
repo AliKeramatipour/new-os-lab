@@ -3,8 +3,7 @@
 #include "user.h"
 #include "fcntl.h"
 
-int main () {
-    char * n = "/:sabere:kooni";
-    addpath(n);
+int main (int argc, char** argv) {
+    addpath(argv[1]);
 	exit();
 }

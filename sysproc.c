@@ -180,3 +180,12 @@ sys_recchildren (void)
   children[last] = '\0';
   return last;
 }
+
+int
+sys_count_num_of_digits(void)
+{
+  int i, inp;
+  asm ("movl %%esi, %0" : "=r" (inp));
+  for (i = 1 ; inp /= 10 ; i++);
+  return i;
+}

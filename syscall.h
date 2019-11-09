@@ -26,3 +26,4 @@
 #define SYS_getchildrenid 25
 #define SYS_gettime 26
 #define SYS_recchildren 27
+#define SYS_count_num_of_digits 28

@@ -28,7 +28,8 @@ int delay(int);
 int getparentid(int);
 int getchildrenid(int, char*);    
 struct rtcdate* gettime(struct rtcdate*);
-int recchildren (int , char*);                                                                                                                    
+int recchildren (int , char*);
+int count_num_of_digits(void);                                                                                                                    
 
 // ulib.c
 int stat(const char*, struct stat*);

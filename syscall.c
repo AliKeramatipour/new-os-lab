@@ -109,6 +109,7 @@ extern int sys_getparentid(void);
 extern int sys_getchildrenid(void);
 extern int sys_gettime(void);
 extern int sys_recchildren(void);
+extern int sys_count_num_of_digits(void);
 
 
 static int (*syscalls[])(void) = {
@@ -139,6 +140,7 @@ static int (*syscalls[])(void) = {
 [SYS_getchildrenid] sys_getchildrenid,
 [SYS_gettime] sys_gettime,
 [SYS_recchildren] sys_recchildren,
+[SYS_count_num_of_digits] sys_count_num_of_digits,
 };
 
 void

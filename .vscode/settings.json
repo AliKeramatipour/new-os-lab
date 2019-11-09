@@ -2,6 +2,7 @@
     "files.associations": {
         "defs.h": "c",
         "path.h": "c",
-        "date.h": "c"
+        "date.h": "c",
+        "fcntl.h": "c"
     }
 }
