@@ -535,9 +535,7 @@ procdump(void)
 
 int getparent (int pid) {
   struct proc *p;
-  int a = 0;
   int parentPid = 0;
-  a++;
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
