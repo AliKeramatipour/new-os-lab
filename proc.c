@@ -755,3 +755,80 @@ int assignpriority(int pid, int priority) {
   release(&ptable.lock);
   return -1;
 }
+
+void reverse(char* str, int len) 
+{ 
+    int i = 0, j = len - 1, temp; 
+    while (i < j) { 
+        temp = str[i]; 
+        str[i] = str[j]; 
+        str[j] = temp; 
+        i++; 
+        j--; 
+    } 
+} 
+  
+int intToStr(int x, char str[], int d) 
+{ 
+    int i = 0; 
+    while (x) { 
+        str[i++] = (x % 10) + '0'; 
+        x = x / 10; 
+    } 
+  
+    while (i < d) 
+        str[i++] = '0'; 
+  
+    reverse(str, i); 
+    str[i] = '\0'; 
+    return i; 
+} 
+  
+void ftoa(float n, char* res, int afterpoint) 
+{ 
+    int ipart = (int)n; 
+  
+    float fpart = n - (float)ipart; 
+  
+    int i = intToStr(ipart, res, 0); 
+  
+    if (afterpoint != 0) { 
+        res[i] = '.'; 
+
+        fpart = fpart * pow(10, afterpoint); 
+  
+        intToStr((int)fpart, res + i + 1, afterpoint); 
+    } 
+} 
+
+void printproctable() {
+  struct proc *p;
+  static char *states[] = {
+  [UNUSED]    "UNUSED",
+  [EMBRYO]    "EMBYRO",
+  [SLEEPING]  "SLEEPING",
+  [RUNNABLE]  "RUNNABLE",
+  [RUNNING]   "RUNNING",
+  [ZOMBIE]    "ZOMBIE"
+  };
+  char prio[20], HRRNstr[20];
+  int afterdot = 3;
+  float HRRN;
+  uint now, wait;
+  acquire(&ptable.lock);
+  cprintf("name,    pid,    state,    queue number,    priority,    lottery chance,    num of cycles,    HRRN\n");
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if (p->pid != 0) {
+      acquire(&tickslock);
+      now = ticks;
+      release(&tickslock);
+      wait = now - p->arrivalTime;
+      HRRN = wait/p->executedCycles;
+      ftoa(p->priority, prio, afterdot);
+      ftoa(HRRN, HRRNstr, afterdot);
+      cprintf("%s,    %d,    %s,    %d,    %s,    %d,    %d,    %s\n",
+        p->name, p->pid, states[p->state], p->queue, prio, p->lotteryChance, p->executedCycles, HRRNstr
+      );
+    }
+  }
+}
