@@ -189,3 +189,27 @@ sys_count_num_of_digits(void)
   for (i = 1 ; inp /= 10 ; i++);
   return i;
 }
+
+int
+sys_change_process_queue(void)
+{
+
+}
+
+int
+sys_assign_tickets(void)
+{
+
+}
+
+int
+sys_assign_srpf_priority(void)
+{
+
+}
+
+int
+sys_print_process_table(void)
+{
+
+}

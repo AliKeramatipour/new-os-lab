@@ -27,3 +27,7 @@
 #define SYS_gettime 26
 #define SYS_recchildren 27
 #define SYS_count_num_of_digits 28
+#define SYS_change_process_queue 29
+#define SYS_assign_tickets 30
+#define SYS_assign_srpf_priority 31
+#define SYS_print_process_table 32

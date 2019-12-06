@@ -110,7 +110,10 @@ extern int sys_getchildrenid(void);
 extern int sys_gettime(void);
 extern int sys_recchildren(void);
 extern int sys_count_num_of_digits(void);
-
+extern int sys_change_process_queue(void);
+extern int sys_assign_tickets(void);
+extern int sys_assign_srpf_priority(void);
+extern int sys_print_process_table(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -141,6 +144,10 @@ static int (*syscalls[])(void) = {
 [SYS_gettime] sys_gettime,
 [SYS_recchildren] sys_recchildren,
 [SYS_count_num_of_digits] sys_count_num_of_digits,
+[SYS_change_process_queue] sys_change_process_queue,
+[SYS_assign_tickets] sys_assign_tickets,
+[SYS_assign_srpf_priority] sys_assign_srpf_priority,
+[SYS_print_process_table] sys_print_process_table
 };
 
 void

@@ -30,6 +30,10 @@ int getchildrenid(int, char*);
 struct rtcdate* gettime(struct rtcdate*);
 int recchildren (int , char*);
 int count_num_of_digits(void);                                                                                                                    
+int change_process_queue(int, int);
+int assign_tickets(int, int);
+int assign_srpf_priority(int, int);
+int print_process_table();
 
 // ulib.c
 int stat(const char*, struct stat*);
