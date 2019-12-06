@@ -189,23 +189,35 @@ sys_count_num_of_digits(void)
 int
 sys_change_process_queue(void)
 {
-
+  int pid, queue, result;
+  argint(0, &pid);
+  argint(1, &queue);
+  result = assignqueue(pid, queue);
+  return result;
 }
 
 int
 sys_assign_tickets(void)
 {
-
+  int pid, tickets, result;
+  argint(0, &pid);
+  argint(1, &tickets);
+  result = assigntickets(pid, tickets);
+  return result;
 }
 
 int
 sys_assign_srpf_priority(void)
 {
-
+  int pid, priority, result;
+  argint(0, &pid);
+  argint(1, &priority);
+  result = assignpriority(pid, priority);
+  return result;
 }
 
 int
 sys_print_process_table(void)
 {
-
+  
 }

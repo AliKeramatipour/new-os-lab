@@ -123,6 +123,10 @@ void            yield(void);
 int             getparent(int);
 int             getchildren(int, char*);
 int             getrecchildren(int pid, char *children, int pos);
+int             assignqueue(int pid, int queue);
+int             assigntickets(int pid, int tickets);
+int             assignpriority(int pid, int priority);
+
 
 // swtch.S
 void            swtch(struct context**, struct context*);

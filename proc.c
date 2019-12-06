@@ -323,7 +323,23 @@ wait(void)
 // Random Number generator for lottery scheduling
 int randomNumberGenerator(int mx)
 {
-  return 0;
+  int min = 0;
+  uint rand = ticks * ticks; /* Any nonzero start state will work. */
+
+    /*check for valid range.*/
+    if(min == mx) {
+        return min;
+    }
+
+    /*get the random in end-range.*/
+    rand += 0x3AD;
+    rand %= mx;
+
+    /*get the random in start-range.*/
+    while(rand < min){
+        rand = rand + mx - min;
+    }
+  return rand;
 }
 
 //PAGEBREAK: 42
@@ -695,4 +711,46 @@ int getrecchildren(int pid, char *children, int pos) {
   release(&ptable.lock);
   children[pos++] = '<';
   return pos;
+}
+
+int assignqueue(int pid, int queue) {
+  struct proc *p;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if(p->pid == pid){
+      p->queue = queue;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int assigntickets(int pid, int tickets) {
+  struct proc *p;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if(p->pid == pid){
+      p->lotteryChance = tickets;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int assignpriority(int pid, int priority) {
+    struct proc *p;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if(p->pid == pid){
+      p->priority = priority;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
 }
