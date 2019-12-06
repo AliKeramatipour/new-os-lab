@@ -400,6 +400,7 @@ scheduler(void)
       }
       if ( foundProcess == 1 ){
         p = second_p ;
+        p -> executedCycles++ ;
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
@@ -428,6 +429,7 @@ scheduler(void)
       }
       if ( foundProcess == 1 ){
         p = third_p;
+        p -> executedCycles++;
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
