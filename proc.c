@@ -87,6 +87,12 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
+  p->queue = 2 ;
+  p->executedCycles = 0 ;
+  //MIGHT NEED TO CHECK LATER
+  acquire(&tickslock);
+  p -> arrivalTime = ticks;
+  release(&tickslock);
   p->pid = nextpid++;
 
   release(&ptable.lock);
