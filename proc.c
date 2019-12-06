@@ -7,6 +7,8 @@
 #include "proc.h"
 #include "spinlock.h"
 
+const double MAX_PRIO = 1000;
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -88,7 +90,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->queue = 2 ;
-  p->executedCycles = 0 ;
+  p->executedCycles = 1 ;
   //MIGHT NEED TO CHECK LATER
   acquire(&tickslock);
   p -> arrivalTime = ticks;
@@ -217,6 +219,8 @@ fork(void)
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
   pid = np->pid;
+  np -> queue = 3 ;
+  np -> priority = curproc -> priority + 100 ;
 
   acquire(&ptable.lock);
 
@@ -316,6 +320,11 @@ wait(void)
     sleep(curproc, &ptable.lock);  //DOC: wait-sleep
   }
 }
+// Random Number generator for lottery scheduling
+int randomNumberGenerator(int mx)
+{
+  return 0;
+}
 
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
@@ -338,26 +347,96 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    int sum = 0;
+    int foundProcess = 0;
+
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->queue != 1 )
+        continue;
       if(p->state != RUNNABLE)
         continue;
-
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
-
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
-
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
+      sum = sum + p -> lotteryChance ;
     }
-    release(&ptable.lock);
+    int randNumber = randomNumberGenerator(sum);
+    sum = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->queue != 1 )
+        continue;
+      if(p->state != RUNNABLE)
+        continue;
+      if ( randNumber >= sum && randNumber < sum + p -> lotteryChance )
+      {
+        foundProcess = 1;
+        p->executedCycles++;
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+        c->proc = 0;
+        break;
+      }
+      sum = sum + p -> lotteryChance ;
+    }
 
+    //FOR second Queue
+    if ( foundProcess == 0 ){
+      struct proc *second_p;
+      double maxHRRN = 0, HRRN = 0;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->queue != 2 )
+          continue;
+        if(p->state != RUNNABLE)
+          continue;
+        acquire(&tickslock);
+        HRRN = ticks - p->arrivalTime;
+        release(&tickslock);
+        HRRN = HRRN / ((double)p->executedCycles) ;
+        if ( maxHRRN < HRRN ){
+          maxHRRN = HRRN;
+          second_p = p ;
+          foundProcess = 1;
+        }
+      }
+      if ( foundProcess == 1 ){
+        p = second_p ;
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+        c->proc = 0;
+      }
+    }
+
+    //THIRD QUEUE
+    if ( foundProcess == 0 )
+    {
+      struct proc *third_p;
+      double minPrio = MAX_PRIO ;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->queue != 3 )
+          continue;
+        if(p->state != RUNNABLE)
+          continue;
+        if ( minPrio > p -> priority )
+        {
+          minPrio = p -> priority ;
+          third_p = p ;
+          foundProcess = 1 ;
+        }
+      }
+      if ( foundProcess == 1 ){
+        p = third_p;
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+        c->proc = 0;
+      }
+    }    
+    release(&ptable.lock);
   }
 }
 

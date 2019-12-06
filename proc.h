@@ -54,7 +54,7 @@ struct proc {
   int lotteryChance;
   int arrivalTime ;
   int executedCycles;
-  int priority;
+  double priority;
 };
 
 // Process memory is laid out contiguously, low addresses first:
