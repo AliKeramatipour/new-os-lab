@@ -196,7 +196,6 @@ fork(void)
   if((np = allocproc()) == 0){
     return -1;
   }
-
   // Copy process state from proc.
   if((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0){
     kfree(np->kstack);
@@ -207,7 +206,6 @@ fork(void)
   np->sz = curproc->sz;
   np->parent = curproc;
   *np->tf = *curproc->tf;
-
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
 
@@ -227,7 +225,6 @@ fork(void)
   np->state = RUNNABLE;
 
   release(&ptable.lock);
-
   return pid;
 }
 
@@ -350,6 +347,9 @@ int randomNumberGenerator(int mx)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+
+void ftoa(float n, char* res, int afterpoint);
+
 void
 scheduler(void)
 {
@@ -431,6 +431,7 @@ scheduler(void)
     {
       struct proc *third_p;
       double minPrio = MAX_PRIO ;
+      // double maxPrio = 0 ;
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->queue != 3 )
           continue;
@@ -442,10 +443,17 @@ scheduler(void)
           third_p = p ;
           foundProcess = 1 ;
         }
+        // if ( maxPrio < p -> priority )
+        // {
+        //   maxPrio = p -> priority ;
+        //   third_p = p;
+        //   foundProcess = 1 ;
+        // }
       }
       if ( foundProcess == 1 ){
         p = third_p;
-        p->priority -= 0.1;
+        if(p->priority > 0.1)
+          p->priority -= 0.1;
         p->executedCycles++;
         c->proc = p;
         switchuvm(p);
@@ -831,4 +839,6 @@ void printproctable() {
       );
     }
   }
+  release(&ptable.lock);
+  return;
 }
