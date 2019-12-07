@@ -219,5 +219,6 @@ sys_assign_srpf_priority(void)
 int
 sys_print_process_table(void)
 {
-  
+  printproctable();
+  return 0;
 }

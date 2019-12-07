@@ -126,6 +126,7 @@ int             getrecchildren(int pid, char *children, int pos);
 int             assignqueue(int pid, int queue);
 int             assigntickets(int pid, int tickets);
 int             assignpriority(int pid, int priority);
+void            printproctable();
 
 
 // swtch.S
