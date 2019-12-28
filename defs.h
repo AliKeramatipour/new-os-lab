@@ -130,6 +130,7 @@ void            printproctable();
 int             assign_barrier(int number);
 int             check_barrier(int index);
 int             arrive_at_barrier(int index);
+int             test_reentrant_spinlock(int pid);
 
 
 // swtch.S
@@ -143,6 +144,7 @@ void            initlock(struct spinlock*, char*);
 void            release(struct spinlock*);
 void            pushcli(void);
 void            popcli(void);
+void            acquire_rn(struct spinlock*, int pid);
 
 // sleeplock.c
 void            acquiresleep(struct sleeplock*);

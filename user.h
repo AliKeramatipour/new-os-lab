@@ -37,6 +37,7 @@ int print_process_table();
 int assign_barrier(int);
 int check_barrier(int);
 int arrive_at_barrier(int);
+int test_reentrant_spinlock(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

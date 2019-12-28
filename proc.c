@@ -893,12 +893,16 @@ void reqursive_test(int pid, int depth){
   if(depth == 0)
     return;
   acquire_rn(&ptable.lock, pid);
+  cprintf("acquired\n");
   reqursive_test(pid, depth - 1);
 }
 
 int test_reentrant_spinlock(int pid){
   acquire_rn(&ptable.lock, pid);
+  cprintf("acquired\n");
   reqursive_test(pid, 10);
   release(&ptable.lock);
+  cprintf("released\n");
+  return 0;
 }
 

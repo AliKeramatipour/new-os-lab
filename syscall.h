@@ -34,3 +34,4 @@
 #define SYS_assign_barrier 33
 #define SYS_check_barrier 34
 #define SYS_arrive_at_barrier 35
+#define SYS_test_reentrant_spinlock 36

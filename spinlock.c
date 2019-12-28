@@ -124,3 +124,27 @@ popcli(void)
     sti();
 }
 
+void
+acquire_rn(struct spinlock *lk, int pid)
+{
+  if (lk->owner == pid) {
+    return;
+  }
+  pushcli(); // disable interrupts to avoid deadlock.
+  if(holding(lk))
+    panic("acquire");
+
+  // The xchg is atomic.
+  while(xchg(&lk->locked, 1) != 0)
+    ;
+
+  // Tell the C compiler and the processor to not move loads or stores
+  // past this point, to ensure that the critical section's memory
+  // references happen after the lock is acquired.
+  __sync_synchronize();
+
+  // Record info about lock acquisition for debugging.
+  lk->cpu = mycpu();
+  getcallerpcs(&lk, lk->pcs);
+  lk->owner = pid;
+}

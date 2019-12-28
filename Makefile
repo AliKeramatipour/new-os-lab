@@ -186,6 +186,7 @@ UPROGS=\
 	_stest1\
 	_stest2\
 	_stest3\
+	_spinlock_test\
 	_barrier_test2\
 	_barrier_test\
 	_programSleep\
@@ -261,7 +262,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c cpt.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c stest1.c stest2.c stest3.c programPath.c programSleep.c parent.c children.c recchildren.c count.c barrier_test.c barrier_test2.c\
+	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c stest1.c stest2.c stest3.c programPath.c programSleep.c parent.c children.c recchildren.c count.c barrier_test.c barrier_test2.c spinlock_test.c\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
