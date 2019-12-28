@@ -246,3 +246,9 @@ sys_arrive_at_barrier(void)
   argint(0, &barrier_id);
   return arrive_at_barrier(barrier_id);
 }
+
+int
+sys_test_reentrant_spinlock(void)
+{
+  
+}
