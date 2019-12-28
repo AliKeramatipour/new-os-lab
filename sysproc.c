@@ -222,3 +222,27 @@ sys_print_process_table(void)
   printproctable();
   return 0;
 }
+
+int
+sys_assign_barrier(void)
+{
+  int proc_count;
+  argint(0, &proc_count);
+  return assign_barrier(proc_count);
+}
+
+int
+sys_check_barrier(void)
+{
+  int barrier_id;
+  argint(0, &barrier_id);
+  return check_barrier(barrier_id);
+}
+
+int
+sys_arrive_at_barrier(void)
+{
+  int barrier_id;
+  argint(0, &barrier_id);
+  return arrive_at_barrier(barrier_id);
+}

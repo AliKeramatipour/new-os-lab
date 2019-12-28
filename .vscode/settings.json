@@ -3,6 +3,7 @@
         "defs.h": "c",
         "path.h": "c",
         "date.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "spinlock.h": "c"
     }
 }

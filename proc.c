@@ -856,7 +856,7 @@ void printproctable() {
 int assign_barrier(int number){
   int i = 0, index = -1;
   for(i = 0 ; i < 10 ; i++){
-    if(barriers[i].free == 1){
+    if(barriers[i].free == 0){
       index = i;
       break;
     }
@@ -864,7 +864,7 @@ int assign_barrier(int number){
   if(index == -1)
     return -1;
   barriers[index].waiters = number;
-  barriers[index].free = 0;
+  barriers[index].free = 1;
   barriers[index].arrived = 0;
   return index;
 }
@@ -876,14 +876,14 @@ int check_barrier(int index){
     barriers[index].arrived--;
     barriers[index].waiters--;
     if(barriers[index].waiters == 0)
-      barriers[index].free = 1;
+      barriers[index].free = 0;
     return 1;
   }
   return 0;
 }
 
 int arrive_at_barrier(int index){
-  if(barriers[index].free == 1 || index >= 10)
+  if(barriers[index].free == 0 || index >= 10)
     return -1;
   barriers[index].arrived++;
   return 0;

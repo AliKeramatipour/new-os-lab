@@ -31,3 +31,6 @@
 #define SYS_assign_tickets 30
 #define SYS_assign_srpf_priority 31
 #define SYS_print_process_table 32
+#define SYS_assign_barrier 33
+#define SYS_check_barrier 34
+#define SYS_arrive_at_barrier 35
