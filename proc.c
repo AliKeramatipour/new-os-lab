@@ -14,6 +14,14 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+struct barrier{
+  int waiters;
+  int arrived;
+  int free;
+};
+
+
+struct barrier barriers[10];
 
 static struct proc *initproc;
 
@@ -843,16 +851,6 @@ void printproctable() {
   release(&ptable.lock);
   return;
 }
-
-
-struct barrier{
-  int waiters;
-  int arrived;
-  int free;
-};
-
-
-struct barrier barriers[10];
 
 
 int assign_barrier(int number){
