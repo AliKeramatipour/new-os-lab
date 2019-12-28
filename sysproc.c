@@ -250,5 +250,7 @@ sys_arrive_at_barrier(void)
 int
 sys_test_reentrant_spinlock(void)
 {
-  
+  int pid;
+  argint(0, &pid);
+  return test_reentrant_spinlock(pid);
 }
