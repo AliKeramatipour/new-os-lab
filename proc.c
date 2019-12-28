@@ -14,6 +14,7 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -841,4 +842,51 @@ void printproctable() {
   }
   release(&ptable.lock);
   return;
+}
+
+
+struct barrier{
+  int waiters;
+  int arrived;
+  int free;
+};
+
+
+struct barrier barriers[10];
+
+
+int assign_barrier(int number){
+  int i = 0, index = -1;
+  for(i = 0 ; i < 10 ; i++){
+    if(barriers[i].free == 1){
+      index = i;
+      break;
+    }
+  }
+  if(index == -1)
+    return -1;
+  barriers[index].waiters = number;
+  barriers[index].free = 0;
+  barriers[index].arrived = 0;
+  return index;
+}
+
+int check_barrier(int index){
+  if(index >= 10)
+    return -1;
+  if(barriers[index].arrived == barriers[index].waiters){
+    barriers[index].arrived--;
+    barriers[index].waiters--;
+    if(barriers[index].waiters == 0)
+      barriers[index].free = 1;
+    return 1;
+  }
+  return 0;
+}
+
+int arrive_at_barrier(int index){
+  if(barriers[index].free == 1 || index >= 10)
+    return -1;
+  barriers[index].arrived++;
+  return 0;
 }
