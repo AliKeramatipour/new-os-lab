@@ -232,14 +232,6 @@ sys_assign_barrier(void)
 }
 
 int
-sys_check_barrier(void)
-{
-  int barrier_id;
-  argint(0, &barrier_id);
-  return check_barrier(barrier_id);
-}
-
-int
 sys_arrive_at_barrier(void)
 {
   int barrier_id;

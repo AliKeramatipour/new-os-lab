@@ -16,6 +16,7 @@ struct {
 
 struct barrier{
   int waiters;
+  int channel;
   int arrived;
   int free;
 };
@@ -539,7 +540,7 @@ void
 sleep(void *chan, struct spinlock *lk)
 {
   struct proc *p = myproc();
-  
+   
   if(p == 0)
     panic("sleep");
 
@@ -869,24 +870,20 @@ int assign_barrier(int number){
   return index;
 }
 
-int check_barrier(int index){
-  if(index >= 10)
-    return -1;
-  if(barriers[index].arrived == barriers[index].waiters){
-    barriers[index].arrived--;
-    barriers[index].waiters--;
-    if(barriers[index].waiters == 0)
-      barriers[index].free = 0;
-    return 1;
-  }
-  return 0;
-}
-
 int arrive_at_barrier(int index){
+
   if(barriers[index].free == 0 || index >= 10)
     return -1;
+  if(barriers[index].arrived + 1 == barriers[index].waiters){
+    wakeup(&barriers[index].channel);
+    barriers[index].free = 0;
+    return 0;
+  }
   barriers[index].arrived++;
-  return 0;
+  acquire(&ptable.lock);
+  sleep(&barriers[index].channel, &ptable.lock);
+  release(&ptable.lock);
+  return 1;
 }
 
 void reqursive_test(int pid, int depth){

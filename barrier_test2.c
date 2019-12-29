@@ -16,17 +16,17 @@ int main () {
             change_process_queue(j, 2);
         }
     }
-    for ( j = 0 ; j < 100 ; j++)
-        printf(1, "*");
+    for ( j = 0 ; j < 10000 ; j++);
     if (i % 2) {
+        printf(1, "%d arrived at %d\n", getpid(), barrier_id);
         arrive_at_barrier(barrier_id);
-        while(check_barrier(barrier_id) == 0);
-        printf(1, "###");
+        printf(1, "%d passed the %d\n", getpid(), barrier_id);
+
     }
     else {
+        printf(1, "%d arrived at %d\n", getpid(), barrier_id2);
         arrive_at_barrier(barrier_id2);
-        while(check_barrier(barrier_id2) == 0);
-        printf(1, "&&&");
+        printf(1, "%d passed the %d\n", getpid(), barrier_id2);
     }
     
     if (getpid() == parent) {

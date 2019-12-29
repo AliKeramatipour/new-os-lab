@@ -15,12 +15,12 @@ int main () {
             change_process_queue(j, 2);
         }
     }
-    for ( j = 0 ; j < 100 ; j++)
-        printf(1, "*");
+    for ( j = 0 ; j < 100000 ; j++);
+    printf(1, "proccess %d arrived at barrier\n", getpid());
+
     arrive_at_barrier(barrier_id);
-    while(check_barrier(barrier_id) == 0);
-    for (j = 0 ; j < 10 ; j++)
-        printf(1, "+");
+    printf(1, "proccess %d passed the barrier\n", getpid());
+
     if (getpid() == parent) {
         for (i = 0 ; i  < 5 ; i++) {
             wait();

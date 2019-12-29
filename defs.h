@@ -128,7 +128,6 @@ int             assigntickets(int pid, int tickets);
 int             assignpriority(int pid, int priority);
 void            printproctable();
 int             assign_barrier(int number);
-int             check_barrier(int index);
 int             arrive_at_barrier(int index);
 int             test_reentrant_spinlock(int pid);
 
