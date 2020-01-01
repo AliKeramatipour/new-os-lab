@@ -34,9 +34,6 @@ int change_process_queue(int, int);
 int assign_tickets(int, int);
 int assign_srpf_priority(int, int);
 int print_process_table();
-int assign_barrier(int);
-int arrive_at_barrier(int);
-int test_reentrant_spinlock(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -114,9 +114,6 @@ extern int sys_change_process_queue(void);
 extern int sys_assign_tickets(void);
 extern int sys_assign_srpf_priority(void);
 extern int sys_print_process_table(void);
-extern int sys_assign_barrier(void);
-extern int sys_arrive_at_barrier(void);
-extern int sys_test_reentrant_spinlock(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -150,10 +147,7 @@ static int (*syscalls[])(void) = {
 [SYS_change_process_queue] sys_change_process_queue,
 [SYS_assign_tickets] sys_assign_tickets,
 [SYS_assign_srpf_priority] sys_assign_srpf_priority,
-[SYS_print_process_table] sys_print_process_table,
-[SYS_assign_barrier] sys_assign_barrier,
-[SYS_arrive_at_barrier] sys_arrive_at_barrier,
-[SYS_test_reentrant_spinlock] sys_test_reentrant_spinlock
+[SYS_print_process_table] sys_print_process_table
 };
 
 void

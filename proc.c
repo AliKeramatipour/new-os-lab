@@ -14,16 +14,6 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
-struct barrier{
-  int waiters;
-  int channel;
-  int arrived;
-  int free;
-};
-
-
-struct barrier barriers[10];
-
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -540,7 +530,7 @@ void
 sleep(void *chan, struct spinlock *lk)
 {
   struct proc *p = myproc();
-   
+  
   if(p == 0)
     panic("sleep");
 
@@ -852,54 +842,3 @@ void printproctable() {
   release(&ptable.lock);
   return;
 }
-
-
-int assign_barrier(int number){
-  int i = 0, index = -1;
-  for(i = 0 ; i < 10 ; i++){
-    if(barriers[i].free == 0){
-      index = i;
-      break;
-    }
-  }
-  if(index == -1)
-    return -1;
-  barriers[index].waiters = number;
-  barriers[index].free = 1;
-  barriers[index].arrived = 0;
-  return index;
-}
-
-int arrive_at_barrier(int index){
-
-  if(barriers[index].free == 0 || index >= 10)
-    return -1;
-  if(barriers[index].arrived + 1 == barriers[index].waiters){
-    wakeup(&barriers[index].channel);
-    barriers[index].free = 0;
-    return 0;
-  }
-  barriers[index].arrived++;
-  acquire(&ptable.lock);
-  sleep(&barriers[index].channel, &ptable.lock);
-  release(&ptable.lock);
-  return 1;
-}
-
-void reqursive_test(int pid, int depth){
-  if(depth == 0)
-    return;
-  acquire_rn(&ptable.lock, pid);
-  cprintf("acquired\n");
-  reqursive_test(pid, depth - 1);
-}
-
-int test_reentrant_spinlock(int pid){
-  acquire_rn(&ptable.lock, pid);
-  cprintf("acquired\n");
-  reqursive_test(pid, 10);
-  release(&ptable.lock);
-  cprintf("released\n");
-  return 0;
-}
-
