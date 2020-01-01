@@ -4,6 +4,11 @@
 #include "fcntl.h"
 
 int main (int argc, char** argv) {
+  if ( argc != 3 )
+  {
+    printf(1, "not enought inputs\n");
+    exit();
+  }
   int lottory1, lottory2;
   lottory1 = atoi(argv[1]);
   lottory2 = atoi(argv[2]);

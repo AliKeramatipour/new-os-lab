@@ -7,6 +7,11 @@ float stof(const char* s);
 void ftoa(float n, char* res, int afterpoint) ;
 
 int main (int argc, char** argv) {
+  if ( argc != 4 )
+  {
+    printf(1, "not enought inputs\n");
+    exit();
+  }
   int priority1, priority2, priority3;
   priority1 = atoi(argv[1]);
   priority2 = atoi(argv[2]);
